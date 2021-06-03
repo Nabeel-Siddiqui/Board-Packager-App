@@ -1,41 +1,33 @@
-// app/javascript/packs/components/TodoForm.jsx
-import React from 'react'
+import React, { Component } from 'react';
+
 import PropTypes from 'prop-types'
 import axios from 'axios'
 import setAxiosHeaders from "./AxiosHeaders";
 
-class TaskForm extends React.Component {
-  constructor(props) {
-    super(props)
-    this.handleSubmit = this.handleSubmit.bind(this)
-    this.titleRef = React.createRef()
-    this.descriptionRef = React.createRef()
+export default class App extends Component {
+  state = {
+    titleRef = React.createRef(),
+    descriptionRef = React.createRef()
   }
 
-  handleSubmit(e) {
+  handleSubmit = (e) => {
     e.preventDefault()
     setAxiosHeaders();
-    axios
-      .post('/api/v1/task_items', {
-        task_item: {
-          title: this.titleRef.current.value,
-          description: this.descriptionRef.current.value,
-          complete: false,
-        },
-      })
-      .then(response => {
-        const task_item = response.data
-        this.props.createTaskItem(task_item)
-      })
-      .catch(error => {
-        console.log(error)
-      })
-    e.target.reset()
+    axios.post('/api/v1/task_items', {
+      task_item: { title: titleRef.current.value, description: descriptionRef.current.value, complete: false } })
+         .then(response => { 
+           const task_item = response.data
+           props.createTaskItem(task_item)
+          })
+         .catch(error => {
+           console.log(error) })
+           e.target.reset()
   }
+
 
   render() {
     return (
-      <form onSubmit={this.handleSubmit} className="my-3">
+      <form onSubmit={handleSubmit} className="my-3">
         <div className="form-row">
           <div className="form-group col-md-8">
 
@@ -44,7 +36,7 @@ class TaskForm extends React.Component {
               <input
                 type="text"
                 name="title"
-                ref={this.titleRef}
+                ref={titleRef}
                 required
                 className="form-control"
                 id="title"
@@ -57,7 +49,7 @@ class TaskForm extends React.Component {
             <input
               type="text"
               name="description"
-              ref={this.descriptionRef}
+              ref={descriptionRef}
               required
               className="form-control"
               id="description"
@@ -77,7 +69,6 @@ class TaskForm extends React.Component {
   }
 }
 
-export default TaskForm
 
 TaskForm.propTypes = {
   createTaskItem: PropTypes.func.isRequired,
