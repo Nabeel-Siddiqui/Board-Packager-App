@@ -3,7 +3,7 @@ Rails.application.routes.draw do
   authenticated :user do
     root "pages#task_list_items", as: :authenticated_root
   end
-  root 'pages#home'
+    root :to => redirect('/users/sign_in')
   namespace :api, defaults: { format: :json } do
     namespace :v1 do
       resources :task_items, only: [:index, :show, :create, :update, :destroy]
